@@ -1,0 +1,300 @@
+<?php
+session_start();
+if(!isset($_SESSION["U_N"]))
+{
+	
+	header("Location:Login.php");
+}
+?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<?php
+
+
+
+include('config.php');
+
+
+//$qry="select * from visitors";
+
+$qry="select Country,sum(visitors) from visitor group by Country";
+
+$rs=mysqli_query($con,$qry);
+
+
+?>
+<head>
+    <meta charset="utf-8" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Free Bootstrap Admin Template : Binary Admin</title>
+		<!-- BOOTSTRAP STYLES-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     	<!-- FONTAWESOME STYLES-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+     	<!-- MORRIS CHART STYLES-->
+    <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+        <!-- CUSTOM STYLES-->
+    <link href="assets/css/custom.css" rel="stylesheet" />
+        <!-- GOOGLE FONTS-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Country', 'visitors'],
+        
+        <?php
+        
+        while($result=mysqli_fetch_assoc($rs)){
+            
+            //echo "['".$result['Country']."',".$result['visitors']."],";
+                echo "['".$result['Country']."',".$result['sum(visitors)']."],";
+        }
+        
+        ?>
+        
+        
+        
+        ]);
+
+        var options = {
+          title: 'My visitors Ratio'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" style="background-color: #571AC0; font-size: 20px; text-align: center; " href="index.php">
+                <?php
+                	echo $_SESSION['U_N'];
+				?>
+				</a> 
+            </div>
+  <div style="color: white; padding: 15px 50px 5px 50px; float: right; font-size: 16px;"> &nbsp; <a href="logout.php" style="background-color: #571AC0;" class="btn btn-danger square-btn-adjust">Logout</a> </div>
+        </nav>   
+           <!-- /. NAV TOP  -->
+                <nav class="navbar-default navbar-side" role="navigation">
+            	<div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+				<li class="text-center"><img src="<?php echo $_SESSION['image'] ?>" class="user-image img-responsive"/></li>
+				<li>
+                    <a class="" style="background-color: #571AC0;"  href="index.php"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+                </li>
+                <li >
+                    <a href="index2.php"><i class="fa fa-bolt fa-3x"></i>Doctor Panal</a>
+                </li>	
+                <li >
+                     <a href="#"><i class="fa fa-laptop fa-3x"></i>Registeration<span class="fa arrow">  </span></a>
+                     <ul class="nav nav-second-level">
+                            <li>
+                                <a href="register.php">Registeration</a>
+                            </li>
+                            <li> <a href="e_table.php">About doctors  </a> 
+                            </li>
+                        </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-sitemap fa-3x"></i>About Patient<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="add.php">Appointment</a>
+                            </li>
+                            <li><a href="add.php"> Patient details</a>   </li>
+                        </ul>
+                      </li>  
+                <li>
+                        <a  href="review.php"><i class="fa fa-square-o fa-3x"></i>Cities<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="AddCities.php">Add Cities</a>
+                            </li>
+                            <li>
+                                <a href=".Showcities.php">Show Cities</a>
+                            </li>
+                        </ul>
+                </li>
+                <li>
+                    <a  href="e_contact.php"><i class="fa fa-envelope fa-3x"></i>Dr- Profile</a>
+                </li>	
+                </ul>
+               
+            </div>
+            
+        </nav>  
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+        <div id="page-inner">
+        <div id="page-inner">
+                <div class="row">
+                    <div style="text-align: center;" class="col-md-12">
+                     <h2 style="color:#571AC0;">Admin Dashboard</h2>   
+                        <h5>Welcome <?php echo $_SESSION['U_N']; ?>, Love to see you back. </h5>
+                    </div>
+                </div>              
+                 <!-- /. ROW  -->
+                  <hr />
+                 <!-- /. ROW  -->
+                <hr />                
+              
+                 <!-- /. ROW  -->
+                
+                 <!-- /. ROW  -->
+                <div class="row" >
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i>
+                            Doctors Approval
+                        </div>
+                        <div class="panel-body">
+                            <div style="text-align: center;" class="table-responsive">
+                                <table class="table table-hover"  style="margin-top:0px;  background:#CCC;">
+
+        <thead>
+          <tr style="font-size:18px; text-align:center;" >
+            <th scope="col" style="font-size:18px; text-align:center;">Request ID</th>
+            <th scope="col"style="font-size:18px; text-align:center;">Username</th>
+            <th scope="col" style="font-size:18px; text-align:center;">Doctor's Name</th>
+            <th scope="col" style="font-size:18px; text-align:center;">Status</th>
+          </tr>
+        </thead>
+      <?php
+          include("config.php");
+          $result = mysqli_query($con,"select * from request") or die(mysql_error());
+          while($row = mysqli_fetch_array($result))
+          {
+            $id = $row[0];
+      ?>
+      <tbody>
+        <tr style="font-size:15px; color:black; text-align:center;">
+            <td scope="row"><a href="review.php"><?php echo $row[0];?></a></td>
+            <td><a href="review.php"><?php echo $row[1];?></a></td>
+            <td><a href="review.php"><?php echo $row[2];?></a></td>
+            <td id="s"><a href="review.php"><?php echo $row[3];?></a></td>
+            <td></td>
+          <td style="font-weight:bold; font-size:15px; ">
+            <script type="text/javascript">
+                  function setAction(a)
+                  {
+                      //alert('a');
+                      x = new XMLHttpRequest();
+                    x.open("GET","setStatus.php?action="+a+"&id=<?php echo $row[0];?>",true);
+                    x.send();
+                    x.onreadystatechange = function()
+                    {
+                        if(x.status==200 && x.readyState==4)
+                      {
+                         document.getElementById("s").innerHTML = x.responseText;
+                      }
+                  }
+                }
+              </script>
+            </td>
+        </tr>
+      </tbody>
+              <?php }?>
+</table> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                 <!-- /. ROW  -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="chat-panel panel panel-default chat-boder chat-panel-head" >
+                        <div class="panel-heading">
+                            Doctor Profiles
+                        </div>
+
+
+                        <div class="panel-body">
+                            <ul class="chat-box">
+                                
+                                    <div class="chat-body"> 
+                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Doctor ID</th>
+                                            <th>Doctor NAME</th>
+                                            <th>Doctor USERNAME</th>
+                                            <th>Doctor EMAIL</th>
+                                            <th>Doctor PASSWORD</th>
+                                            <th>Doctor RE-PASSWORD</th>
+                                            <th>Doctor IMAGES</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                          <?php
+                                                include("config.php");
+                                                $sql="select * from reg";
+                                                $rs=mysqli_query($con,$sql);
+                                                while($result=mysqli_fetch_array($rs)){
+                                            ?>
+                                        <tr class="odd gradeX">
+                                            <td><a href="e_table.php"><?php echo $result['Id'] ?></a></td>
+                                            <td><a href="e_table.php"><?php echo $result['name'] ?></a></td>
+                                            <td><a href="e_table.php"><?php echo $result['username'] ?></a></td>
+                                            <td><a href="e_table.php"><?php echo $result['email'] ?></a></td>
+                                            <td><a href="e_table.php"><?php echo $result['password'] ?></a></td>
+                                            <td><a href="e_table.php"><?php echo $result['r_password'] ?></a></td>
+                           <td><a href="e_table.php"><img src="upload/<?php echo $result['img']; ?>"  style="height:100px; width:100px;"></a></td>
+                                        </tr>
+                                     <?php
+                                                       }
+                                                       ?>
+                                    </tbody>
+                                </table>                                       
+                                          
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+        <!-- /. ROW  -->           
+        </div>
+    <!-- /. PAGE INNER  -->
+    </div>
+<!-- /. PAGE WRAPPER  -->
+</div>
+    <!-- /. WRAPPER  -->
+
+    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+    <!-- JQUERY SCRIPTS -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- BOOTSTRAP SCRIPTS -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- METISMENU SCRIPTS -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+     <!-- MORRIS CHART SCRIPTS -->
+     <script src="assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="assets/js/morris/morris.js"></script>
+      <!-- CUSTOM SCRIPTS -->
+    <script src="assets/js/custom.js"></script>
+    
+   
+</body>
+</html>
